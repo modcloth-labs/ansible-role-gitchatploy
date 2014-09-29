@@ -11,6 +11,8 @@ gitchatploy_revision: "{{ revision | default(version | default('')) }}"
 # github repo that is being deployed
 gitchatploy_repo: "{{ repo | default('') }}"
 
+gitchatploy_facted: false
+
 # hipchat api token
 gitchatploy_hipchat_api_token: "{{ hipchat_api_token | default('') }}"
 

@@ -1,0 +1,11 @@
+---
+language: python
+sudo: false
+install:
+- pip install -r requirements.txt
+script:
+- ansible-playbook -i 127.0.0.1, -c local -s
+    -e ssh_user=travis
+    -e hostname=travis-tmp-host.demo.modcloth.com
+    -vvvv
+    ./example.yml

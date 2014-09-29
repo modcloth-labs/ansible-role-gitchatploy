@@ -6,7 +6,10 @@
     github_token={{ gitchatploy_github_token }}
     repo={{ gitchatploy_repo }}
     revision={{ gitchatploy_revision }}
-  when: gitchatploy_action == "pre" or gitchatploy_action == "post"
+  when: gitchatploy_action == "pre" or (
+        gitchatploy_action == "post" and not
+        gitchatploy_facted
+      )
 
 - name: notify hipchat deploy started
   sudo: false
@@ -14,20 +17,16 @@
   hipchat:
     token: "{{ gitchatploy_hipchat_api_token }}"
     room: "{{ gitchatploy_hipchat_team_room }}"
-    msg: '{{ deployer | default(gitchatploy_deployer) }}
-       is deploying
-       <a href="https://github.com/{{ gitchatploy_repo }}">
-         {{ gitchatploy_application }}
-       </a>
-       <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">
-         {{ gitchatploy_revision }}
-       </a>
-       {{ gitchatploy_tag_annotation }}
-       to {{ hostname | default(ansible_fqdn) }}
+    msg: '{{ deployer | default(gitchatploy_deployer) }} is deploying
+       <a href="https://github.com/{{ gitchatploy_repo }}">{{ gitchatploy_application }}</a>
+       <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">{{ gitchatploy_revision }}</a>
+       {{ gitchatploy_tag_annotation }} to {{ hostname | default(ansible_fqdn) }}
     '
     msg_format: html
     color: "{{ gitchatploy_hipchat_color }}"
-  when: gitchatploy_action == "pre"
+  when: gitchatploy_action == "pre" and
+        gitchatploy_hipchat_api_token != "" and
+        gitchatploy_hipchat_team_room != ""
 
 - name: notify hipchat deploy complete
   sudo: false
@@ -35,17 +34,13 @@
   hipchat:
     token: "{{ gitchatploy_hipchat_api_token }}"
     room: "{{ gitchatploy_hipchat_team_room }}"
-    msg: '{{ deployer | default(gitchatploy_deployer) }}
-      is done deploying
-      <a href="https://github.com/{{ gitchatploy_repo }}">
-        {{ gitchatploy_application }}
-      </a>
-      <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">
-        {{ gitchatploy_revision }}
-      </a>
-      {{ gitchatploy_tag_annotation }}
-      to {{ hostname | default(ansible_fqdn) }}
+    msg: '{{ deployer | default(gitchatploy_deployer) }} is done deploying
+      <a href="https://github.com/{{ gitchatploy_repo }}">{{ gitchatploy_application }}</a>
+      <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">{{ gitchatploy_revision }}</a>
+      {{ gitchatploy_tag_annotation }} to {{ hostname | default(ansible_fqdn) }}
     '
     msg_format: html
     color: "{{ gitchatploy_hipchat_color }}"
-  when: gitchatploy_action == "post"
+  when: gitchatploy_action == "post" and
+        gitchatploy_hipchat_api_token != "" and
+        gitchatploy_hipchat_team_room != ""

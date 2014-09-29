@@ -1,12 +1,14 @@
 ---
 - hosts: "{{ server | default('all') }}"
+  gather_facts: false
   vars:
-    gitchatploy_github_token: 1a2b3c4d
-    gitchatploy_application: fancy
-    gitchatploy_revision: v0.1.0
-    gitchatploy_repo: orgname/fancy
-    gitchatploy_hipchat_api_token: 1a2b3d4d
-    gitchatploy_hipchat_team_room: Tim Hortons
+    hostname: fancy-pants-01.demo.example.com
+    gitchatploy_github_token: "{{ lookup('env', 'GITHUB_TOKEN') or '' }}"
+    gitchatploy_application: "{{ (lookup('env', 'REPO') or 'orgnam/fancy').split('/')[1] }}"
+    gitchatploy_revision: "{{ lookup('env', 'REVISION') or 'v0.1.0' }}"
+    gitchatploy_repo: "{{ lookup('env', 'REPO') or 'orgname/fancy' }}"
+    gitchatploy_hipchat_api_token: "{{ lookup('env', 'HIPCHAT_API_TOKEN') or '' }}"
+    gitchatploy_hipchat_team_room: "{{ lookup('env', 'HIPCHAT_TEAM_ROOM') or '' }}"
   roles:
   - role: modcloth.gitchatploy
     gitchatploy_action: pre
