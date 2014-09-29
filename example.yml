@@ -4,7 +4,7 @@
   vars:
     hostname: fancy-pants-01.demo.example.com
     gitchatploy_github_token: "{{ lookup('env', 'GITHUB_TOKEN') or '' }}"
-    gitchatploy_application: "{{ (lookup('env', 'REPO') or 'orgnam/fancy').split('/')[1] }}"
+    gitchatploy_application: "{{ (lookup('env', 'REPO') or 'orgname/fancy').split('/')[1] }}"
     gitchatploy_revision: "{{ lookup('env', 'REVISION') or 'v0.1.0' }}"
     gitchatploy_repo: "{{ lookup('env', 'REPO') or 'orgname/fancy' }}"
     gitchatploy_hipchat_api_token: "{{ lookup('env', 'HIPCHAT_API_TOKEN') or '' }}"
