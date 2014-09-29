@@ -1,0 +1,21 @@
+---
+# API token with access to the repository being deployed
+gitchatploy_github_token: "{{ github_token | default('') }}"
+
+# Name of the application
+gitchatploy_application: "{{ application | default('') }}"
+
+# git tag that is being deployed, defaults to revision
+gitchatploy_revision: "{{ revision | default(version | default('')) }}"
+
+# github repo that is being deployed
+gitchatploy_repo: "{{ repo | default('') }}"
+
+# hipchat api token
+gitchatploy_hipchat_api_token: "{{ hipchat_api_token | default('') }}"
+
+# hipchat team room
+gitchatploy_hipchat_team_room: "{{ hipchat_team_room | default('') }}"
+
+# hipchat notification color
+gitchatploy_hipchat_color: "{{ hipchat_color | default('purple') }}"

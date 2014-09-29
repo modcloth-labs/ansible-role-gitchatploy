@@ -1,0 +1,51 @@
+---
+- name: get facts
+  sudo: false
+  connection: local
+  gitchatploy_facts:
+    github_token={{ gitchatploy_github_token }}
+    repo={{ gitchatploy_repo }}
+    revision={{ gitchatploy_revision }}
+  when: gitchatploy_action == "pre" or gitchatploy_action == "post"
+
+- name: notify hipchat deploy started
+  sudo: false
+  connection: local
+  hipchat:
+    token: "{{ gitchatploy_hipchat_api_token }}"
+    room: "{{ gitchatploy_hipchat_team_room }}"
+    msg: '{{ deployer | default(gitchatploy_deployer) }}
+       is deploying
+       <a href="https://github.com/{{ gitchatploy_repo }}">
+         {{ gitchatploy_application }}
+       </a>
+       <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">
+         {{ gitchatploy_revision }}
+       </a>
+       {{ gitchatploy_tag_annotation }}
+       to {{ hostname | default(ansible_fqdn) }}
+    '
+    msg_format: html
+    color: "{{ gitchatploy_hipchat_color }}"
+  when: gitchatploy_action == "pre"
+
+- name: notify hipchat deploy complete
+  sudo: false
+  connection: local
+  hipchat:
+    token: "{{ gitchatploy_hipchat_api_token }}"
+    room: "{{ gitchatploy_hipchat_team_room }}"
+    msg: '{{ deployer | default(gitchatploy_deployer) }}
+      is done deploying
+      <a href="https://github.com/{{ gitchatploy_repo }}">
+        {{ gitchatploy_application }}
+      </a>
+      <a href="https://github.com/{{ gitchatploy_repo }}/tree/{{ gitchatploy_revision }}">
+        {{ gitchatploy_revision }}
+      </a>
+      {{ gitchatploy_tag_annotation }}
+      to {{ hostname | default(ansible_fqdn) }}
+    '
+    msg_format: html
+    color: "{{ gitchatploy_hipchat_color }}"
+  when: gitchatploy_action == "post"

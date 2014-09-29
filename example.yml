@@ -1,0 +1,14 @@
+---
+- hosts: "{{ server | default('all') }}"
+  vars:
+    gitchatploy_github_token: 1a2b3c4d
+    gitchatploy_application: fancy
+    gitchatploy_revision: v0.1.0
+    gitchatploy_repo: orgname/fancy
+    gitchatploy_hipchat_api_token: 1a2b3d4d
+    gitchatploy_hipchat_team_room: Tim Hortons
+  roles:
+  - role: modcloth.gitchatploy
+    gitchatploy_action: pre
+  - role: modcloth.gitchatploy
+    gitchatploy_action: post
